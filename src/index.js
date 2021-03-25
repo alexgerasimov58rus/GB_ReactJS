@@ -1,30 +1,50 @@
 
 import React, {Component} from 'react'
 import ReactDom from 'react-dom'
-import style from "./index.module.css"
-import "./index.css"
 
-const messages = ["Hello"];
+let messages = [];
 
 const Messages = () =>{
     return (
         <div>
-            <h1>messages</h1>
-            {messages.map((message) => (
-                <p key={messages}>{message}</p>
+            <h1>MESSAGES</h1>
+            <ul>
+            {messages.map((message, key) => (
+                <li key={key}>{message}</li>
             ))}
-            <input type="text" placeholder="Введите сообщение"/>
-            <button>Отправить</button>
+            </ul>
+            <input type="text" placeholder="Введите сообщение" id="input"/>
+            <button onClick={addMessage}>Отправить</button>
         </div>
     );
 };
 
-ReactDom.render(
-    <>
-        <Messages title = "title" />
-    </>,
-    document.querySelector("#root")
-);
+function addMessage(){
+    let obj = document.getElementById("input");
+
+    if( obj != null){
+        messages.push(obj.value);
+        obj.value = "";
+    }
+
+    render();
+}
+
+function render() {
+    ReactDom.render(
+        <>
+            <Messages title = "title" />
+        </>,
+        document.querySelector("#root")
+    );
+}
+
+render();
+
+// import React, {Component} from 'react'
+// import ReactDom from 'react-dom'
+// import style from "./index.module.css"
+// import "./index.css"
 
 // const App = () => {
 //     return <div className={style.app}> Hello React </div>;
