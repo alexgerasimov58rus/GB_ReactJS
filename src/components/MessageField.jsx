@@ -1,35 +1,41 @@
 import React from 'react';
-import Message from './Message';
+import {Message} from './Message';
 
-export default class MessageField extends React.Component {
+export class MessageField extends React.Component {
     state = {
-        messages: ["Привет!", "Как дела?"],
-        author: 'Some'
+        messages: [{
+            text: "Привет!, Как дела?",
+            author: 'Some'
+        }],
+
     };
-    handleClick = () => {
+    handleClick = (author, text) => {
+        const {messages} = this.state;
+
         this.setState({
-            messages: [...this.state.messages, 'Нормально'],
-            author: 'Alex'
+            messages: [...messages, {author, text}]
         });
     };
 
     render() {
-        const messageElements = this.state.messages.map((text, index) => (
-            <Message key={index} text={text} author= {this.state.author}/>));
+        const messageElements = this.state.messages.map((mess, index) => (
+            <Message key={index} text={mess.text} author= {mess.author}/>));
         return <div>
             {messageElements}
-            <button onClick={this.handleClick}>Отправить сообщение</button>
+            <button onClick={() => {
+                this.handleClick('Alex', 'Нормально')
+            }}>Отправить сообщение</button>
         </div>
     };
 
     componentDidUpdate() {
-        if( this.state.author !== 'Robot') {
-            setTimeout(() =>
-                this.setState(
-                    {
-                        messages: [...this.state.messages, 'Не приставай ко мне, я робот!'],
-                        author: 'Robot'
-                    }), 1000);
+        const {messages} = this.state;
+        const lastMessage = messages[messages.length - 1];
+
+        if( lastMessage.author !== 'Robot') {
+            setTimeout(() => {
+                this.handleClick('Robot', 'Не приставай комне, я робот')
+                }, 1000);
         }
     };
 };
