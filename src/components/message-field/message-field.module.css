@@ -1,0 +1,24 @@
+.messageField {
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    width: 100%;
+    padding: 20px;
+    overflow-y: scroll;
+}
+
+.layout {
+    padding-bottom: 20px;
+    height: 100vh;
+    width: 50%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.icon {
+    color: #2b5278;
+    cursor: pointer;
+}
