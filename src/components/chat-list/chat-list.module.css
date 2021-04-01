@@ -1,0 +1,6 @@
+.chatList{
+    width: 30%;
+    height: calc(100vh - 100px);
+    border-right: 1px solid gray;
+    background-color: whitesmoke;
+}

@@ -1,5 +1,5 @@
 
-import {MessageField} from './components'
+import {Layout} from './components'
 import './index.css'
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core';
 import React, {Component} from 'react'
@@ -12,7 +12,7 @@ const theme = createMuiTheme(dark);
 
 ReactDom.render(
     <MuiThemeProvider theme = {theme}>
-        <MessageField />
+        <Layout />
     </MuiThemeProvider>,
     document.querySelector("#root")
 );

@@ -1,0 +1,10 @@
+
+.layout{
+    padding: 10px calc(50% - 500px);
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: start;
+}
