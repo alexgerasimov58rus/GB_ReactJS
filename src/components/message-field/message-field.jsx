@@ -26,9 +26,9 @@ export class MessageField extends React.Component {
         value: ""
     };
 
-    handleClick = (author, text) => {
+    sendMessage = (author, text) => {
+        if( text.length === 0) return;
         const {messages} = this.state;
-
         this.setState({
             messages: [...messages, {author, text}],
             value: ""
@@ -45,7 +45,7 @@ export class MessageField extends React.Component {
         const {value} = this.state;
 
         if (code === "Enter") {
-            this.handleClick("Me", value);
+            this.sendMessage("Me", value);
         }
     };
 
@@ -53,9 +53,9 @@ export class MessageField extends React.Component {
         const {messages} = this.state;
         const lastMessage = messages[messages.length - 1];
 
-        if( lastMessage.author !== 'Robot') {
+        if( lastMessage.author !== 'Robot' && lastMessage.text === this.state.value) {
             setTimeout(() => {
-                this.handleClick('Robot', 'Не приставай ко мне, я робот')
+                this.sendMessage('Robot', 'Не приставай ко мне, я робот')
                 }, 1000);
         }
     };
@@ -81,7 +81,7 @@ export class MessageField extends React.Component {
                             <Send
                                 className={styles.icon}
                                 onClick={() => {
-                                    this.handleClick("Me", value);
+                                    this.sendMessage("Me", value);
                                 }}
                             />
                         )}
