@@ -143,6 +143,11 @@ module.exports = {
         port: 3000,
         contentBase: path.resolve(__dirname, "build"),
         historyApiFallback: true,
+        // {
+        //     index: 'index.html'
+        // },
         compress: true
-    }
+    },
+    devtool: !isDevelopment ? false : "source-map",
+    stats: "errors-only"
 };

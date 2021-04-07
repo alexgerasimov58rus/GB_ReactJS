@@ -1,6 +1,11 @@
 .chatList{
     width: 30%;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 70px);
     border-right: 1px solid gray;
-    background-color: whitesmoke;
+    background-color: white;
+}
+
+a{
+    text-decoration: none;
+    color: grey;
 }
