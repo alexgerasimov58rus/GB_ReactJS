@@ -4,6 +4,9 @@ import { Send } from "@material-ui/icons"
 import {Message} from './message/message';
 import styles from './message-field.module.css'
 import PropTypes from "prop-types";
+import {bindActionCreators} from "redux";
+import connect from "react-redux/es/connect/connect";
+import {addChat} from "../../store"
 
 import React from 'react';
 
@@ -21,63 +24,37 @@ const StyledInput = withStyles(() => {
 
 export class MessageField extends React.Component {
     static propTypes = {
-    chatId: PropTypes.number.isRequired,
+        chatId: PropTypes.number.isRequired,
+        chats: PropTypes.object.isRequired,
+        messages: PropTypes.object.isRequired,
+        addChat: PropTypes.func.isRequired
     };
-
-    state = {
-        chats: {
-            1: {title: 'Чат 1', messageList: [1], input: ''},
-            2: {title: 'Чат 2', messageList: [2], input: ''},
-            3: {title: 'Чат 3', messageList: [], input: ''},
-        },
-        messages: {
-            1: { text: "Привет!", author: 'Robot' },
-            2: { text: "Здравствуйте!", author: 'Robot' },
-        },
-    };
-
 
     sendMessage = (author, text) => {
         if( text.length === 0) return;
 
-        const {messages, chats} = this.state;
+        const {messages} = this.props;
         const { chatId } = this.props;
 
         const messageId = Object.keys(messages).length + 1;
 
-        this.setState({
-            messages: {...messages,
-                [messageId]: {text: text, author: author}},
-            chats: {...chats,
-                [chatId]: { ...chats[chatId],
-                    messageList: [...chats[chatId]['messageList'], messageId]
-                }
-            },
-        });
-
-        this.setState((prevState, prevProps) => {
-            const chats = prevState.chats;
-            chats[chatId]['input'] = '';
-            return{
-                chats
-            }
-        });
+        this.props.sendMessage(messageId, text, author, chatId);
     };
 
     handleChangeInput = ({ target }) => {
         const { chatId } = this.props;
 
-        this.setState((prevState, prevProps) => {
-            const chats = prevState.chats;
-            chats[chatId]['input'] = target.value;
-            return{
-                chats
-            }
-        });
+        // this.setState((prevState, prevProps) => {
+        //     const chats = prevProps.chats;
+        //     chats[chatId]['input'] = target.value;
+        //     return{
+        //         chats
+        //     }
+        // });
     };
 
     handlePressInput = ({ code }) => {
-        const { chats } = this.state;
+        const { chats } = this.props;
         const { chatId } = this.props;
 
         if (code === "Enter") {
@@ -86,7 +63,7 @@ export class MessageField extends React.Component {
     };
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        const {messages} = this.state;
+        const {messages} = this.props;
         const lastMessage = Object.values(messages)[Object.values(messages).length - 1];
 
         if( lastMessage.author !== 'Robot' && Object.keys(prevState.messages).length < Object.keys(messages).length)  {
@@ -97,8 +74,10 @@ export class MessageField extends React.Component {
     };
 
     render() {
-        const { messages, chats } = this.state;
+        const { messages, chats } = this.props;
         const { chatId } = this.props;
+
+        console.log(this.props);
 
         let messageElements = null;
 
@@ -142,3 +121,16 @@ export class MessageField extends React.Component {
         </div>
     };
 }
+
+const mapStateToProps = ({ chatsReducer }) => ({
+    chats: chatsReducer.chats,
+    messages: chatsReducer.messages
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({ addChat },
+    dispatch);
+
+export const MessageList = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(MessageField);
