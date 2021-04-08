@@ -8,6 +8,7 @@ export class Router extends React.Component {
     render() {
         return (
             <Switch>
+                <Route exact path='/' component={ Layout } />
                 <Route exact path='/chat' component={ Layout } />
                 <Route exact path='/profile' component={ Profile } />
                 <Route
