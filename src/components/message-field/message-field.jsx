@@ -60,17 +60,6 @@ class MessageField extends React.Component {
         }
     };
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        const {messages} = this.props;
-        const lastMessage = Object.values(messages)[Object.values(messages).length - 1];
-
-        if( lastMessage.author !== 'Robot' && Object.keys(prevProps.messages).length < Object.keys(messages).length)  {
-            setTimeout(() => {
-                this.sendMessage('Robot', 'Не приставай ко мне, я робот')
-                }, 1000);
-        }
-    };
-
     render() {
         const { messages, chats } = this.props;
         const { chatId } = this.props;

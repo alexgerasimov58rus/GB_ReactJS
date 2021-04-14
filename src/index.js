@@ -6,8 +6,8 @@ import { Provider } from "react-redux"
 import { BrowserRouter } from 'react-router-dom'
 import React from 'react'
 import ReactDom from 'react-dom'
-import { createStore } from 'redux'
-import { Reducers } from "./store";
+import {applyMiddleware, compose, createStore} from 'redux'
+import { Reducers, botSendMessage } from "./store";
 
 const dark = {
 };
@@ -15,8 +15,11 @@ const dark = {
 const theme = createMuiTheme(dark);
 const myStore = createStore(
     Reducers,
-    window.__REDUX_DEVTOOLS_EXTENSION__ ?
-    window.__REDUX_DEVTOOLS_EXTENSION__() : () => {},
+    compose(
+        applyMiddleware(botSendMessage),
+        window.__REDUX_DEVTOOLS_EXTENSION__ ?
+            window.__REDUX_DEVTOOLS_EXTENSION__() : () => {}
+    )
 );
 
 ReactDom.render(

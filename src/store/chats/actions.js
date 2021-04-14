@@ -1,6 +1,7 @@
 
 export const ADD_CHAT = 'ADD_CHAT';
-export const SEND_MESSAGE = "SEND_MESSAGE";
+export const SEND_MESSAGE = 'SEND_MESSAGE';
+export const CHANGE_ACTIVITY = 'CHANGE_ACTIVITY';
 
 export function sendMessage(messageId, text, author, chatId) {
     return {
@@ -9,6 +10,14 @@ export function sendMessage(messageId, text, author, chatId) {
         text,
         author,
         chatId
+    };
+}
+
+export function changeActivity(chatId, flag) {
+    return {
+        type: CHANGE_ACTIVITY,
+        chatId,
+        flag
     };
 }
 

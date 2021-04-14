@@ -39,17 +39,21 @@ class ChatList extends Component {
     render() {
         const { chats, chatId } = this.props;
 
+        console.log(chats);
+
         return (
             <div className={styles.chatList}>
                 <List component="nav" aria-label="secondary mailbox folders">
                     {Object.keys(chats).map(index => (
-                        <Link to = {`/chat/${index}/`} key = {index}>
-                            <ListItem button
-                                selected={ "" + chatId === index }
-                            >
-                                <ListItemText primary={chats[index].title} />
-                            </ListItem>
-                        </Link>
+                        <div key = {index} className={chats[index].isActive ? styles.activity: ''}>
+                            <Link to = {`/chat/${index}/`} key = {index}>
+                                <ListItem button
+                                    selected={ "" + chatId === index }
+                                >
+                                    <ListItemText primary={chats[index].title} />
+                                </ListItem>
+                            </Link>
+                        </div>
                     ))}
                     <ListItem
                         key="Add new chat"

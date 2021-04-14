@@ -1,12 +1,12 @@
 
 import update from 'react-addons-update';
-import {SEND_MESSAGE, ADD_CHAT} from "./actions";
+import {SEND_MESSAGE, ADD_CHAT, CHANGE_ACTIVITY} from "./actions";
 
 const initialStore = {
     chats: {
-        1: {title: 'Чат 1', messageList: [1], input: ''},
-        2: {title: 'Чат 2', messageList: [2], input: ''},
-        3: {title: 'Чат 3', messageList: [], input: ''},
+        1: {title: 'Чат 1', messageList: [1], input: '', isActive: false},
+        2: {title: 'Чат 2', messageList: [2], input: '', isActive: false},
+        3: {title: 'Чат 3', messageList: [], input: '', isActive: false},
     },
     messages: {
         1: { text: "Привет!", author: 'Robot' },
@@ -23,6 +23,7 @@ export function chatsReducer(state = initialStore, action){
                             messageList: [...state.chats[action.chatId].messageList,
                                 action.messageId],
                             input: '',
+                            isActive: state.chats[action.chatId].isActive
                         } } },
                 messages: { $merge: { [action.messageId] : {
                             text: action.text,
@@ -37,9 +38,21 @@ export function chatsReducer(state = initialStore, action){
                         [chatId]: {
                             title: action.title,
                             messageList: [],
-                            input: ''
+                            input: '',
+                            isActive: false
                         } } },
             });
+        case CHANGE_ACTIVITY:
+            return update(state, {
+                chats: { $merge: {
+                        [action.chatId]: {
+                            title: state.chats[action.chatId].title,
+                            messageList: state.chats[action.chatId].messageList,
+                            input: state.chats[action.chatId].input,
+                            isActive: action.flag
+                        } } },
+            });
+
         default:
             return state;
     }
