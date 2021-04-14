@@ -2,11 +2,12 @@
 import {InputAdornment, List, ListItem, ListItemText, Input} from "@material-ui/core"
 import {Add} from "@material-ui/icons"
 import styles from './chat-list.module.css'
-import { Link } from 'react-router-dom';
+import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
 import React, { Component } from "react"
 import {addChat} from "@app/store";
 import {connect} from "react-redux";
+import { push } from 'connected-react-router';
 
 class ChatList extends Component {
     state = {
@@ -16,7 +17,8 @@ class ChatList extends Component {
     static propTypes = {
         chatId: PropTypes.number.isRequired,
         chats: PropTypes.object.isRequired,
-        addChat: PropTypes.func.isRequired
+        addChat: PropTypes.func.isRequired,
+        push: PropTypes.func.isRequired,
     };
 
     handleChange = (event) => {
@@ -36,6 +38,10 @@ class ChatList extends Component {
         }
     };
 
+    handleNavigate = (link) => {
+        this.props.push(link);
+    };
+
     render() {
         const { chats, chatId } = this.props;
 
@@ -46,13 +52,13 @@ class ChatList extends Component {
                 <List component="nav" aria-label="secondary mailbox folders">
                     {Object.keys(chats).map(index => (
                         <div key = {index} className={chats[index].isActive ? styles.activity: ''}>
-                            <Link to = {`/chat/${index}/`} key = {index}>
-                                <ListItem button
-                                    selected={ "" + chatId === index }
-                                >
-                                    <ListItemText primary={chats[index].title} />
-                                </ListItem>
-                            </Link>
+                            <ListItem button
+                                key={ index }
+                                onClick={ () => this.handleNavigate(`/chat/${index}`) }
+                                selected={ "" + chatId === index }
+                            >
+                                <ListItemText primary={chats[index].title} />
+                            </ListItem>
                         </div>
                     ))}
                     <ListItem
@@ -90,11 +96,8 @@ const mapStateToProps = ( state ) => {
     };
 };
 
-
-const mapDispatchToProps = (dispatch) => ({
-    addChat: (title) => dispatch(addChat(title)),
-});
-
+const mapDispatchToProps = dispatch => bindActionCreators({ addChat, push },
+    dispatch);
 
 export const VisibleChatList = connect(
     mapStateToProps,
