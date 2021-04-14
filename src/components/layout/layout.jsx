@@ -1,7 +1,7 @@
 
-import {Header} from '../header'
-import {ChatList} from '../chat-list'
-import {MessageField} from '../message-field'
+import {VisibleHeader} from '../header'
+import {VisibleChatList} from '../chat-list'
+import {VisibleMessageField} from '../message-field'
 import styles from './layout.module.css'
 import PropTypes from "prop-types";
 
@@ -18,10 +18,10 @@ export class Layout extends Component {
 
     render() {
         return<div className={styles.layout}>
-            <Header chatId={ this.props.chatId } />
+            <VisibleHeader chatId={ this.props.chatId } />
             <div className={styles.container}>
-                <ChatList />
-                <MessageField chatId={ this.props.chatId } />
+                <VisibleChatList chatId={ this.props.chatId }/>
+                <VisibleMessageField chatId={ this.props.chatId } />
             </div>
         </div>
     }

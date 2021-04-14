@@ -1,14 +1,12 @@
 
 import { Input, withStyles, InputAdornment } from "@material-ui/core"
 import { Send } from "@material-ui/icons"
-import {Message} from './message/message';
+import { Message } from './message/message';
 import styles from './message-field.module.css'
-import PropTypes from "prop-types";
-import {bindActionCreators} from "redux";
-import connect from "react-redux/es/connect/connect";
-import {addChat} from "../../store"
-
 import React from 'react';
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {sendMessage} from "../../store"
 
 const StyledInput = withStyles(() => {
     return {
@@ -22,12 +20,12 @@ const StyledInput = withStyles(() => {
     }
 })(Input);
 
-export class MessageField extends React.Component {
+class MessageField extends React.Component {
     static propTypes = {
         chatId: PropTypes.number.isRequired,
         chats: PropTypes.object.isRequired,
         messages: PropTypes.object.isRequired,
-        addChat: PropTypes.func.isRequired
+        sendMessage: PropTypes.func.isRequired
     };
 
     sendMessage = (author, text) => {
@@ -44,13 +42,13 @@ export class MessageField extends React.Component {
     handleChangeInput = ({ target }) => {
         const { chatId } = this.props;
 
-        // this.setState((prevState, prevProps) => {
-        //     const chats = prevProps.chats;
-        //     chats[chatId]['input'] = target.value;
-        //     return{
-        //         chats
-        //     }
-        // });
+        this.setState((prevState, prevProps) => {
+            const chats = prevProps.chats;
+            chats[chatId]['input'] = target.value;
+            return{
+                chats
+            }
+        });
     };
 
     handlePressInput = ({ code }) => {
@@ -66,7 +64,7 @@ export class MessageField extends React.Component {
         const {messages} = this.props;
         const lastMessage = Object.values(messages)[Object.values(messages).length - 1];
 
-        if( lastMessage.author !== 'Robot' && Object.keys(prevState.messages).length < Object.keys(messages).length)  {
+        if( lastMessage.author !== 'Robot' && Object.keys(prevProps.messages).length < Object.keys(messages).length)  {
             setTimeout(() => {
                 this.sendMessage('Robot', 'Не приставай ко мне, я робот')
                 }, 1000);
@@ -76,8 +74,6 @@ export class MessageField extends React.Component {
     render() {
         const { messages, chats } = this.props;
         const { chatId } = this.props;
-
-        console.log(this.props);
 
         let messageElements = null;
 
@@ -122,15 +118,20 @@ export class MessageField extends React.Component {
     };
 }
 
-const mapStateToProps = ({ chatsReducer }) => ({
-    chats: chatsReducer.chats,
-    messages: chatsReducer.messages
+const mapStateToProps = ( state ) => {
+    return {
+        chats: state.chatsReducer.chats,
+        messages: state.chatsReducer.messages
+    };
+};
+
+
+const mapDispatchToProps = (dispatch) => ({
+    sendMessage: (messageId, text, author, chatId) => dispatch(sendMessage(messageId, text, author, chatId)),
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ addChat },
-    dispatch);
 
-export const MessageList = connect(
+export const VisibleMessageField = connect(
     mapStateToProps,
-    mapDispatchToProps,
+    mapDispatchToProps
 )(MessageField);

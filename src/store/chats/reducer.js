@@ -1,7 +1,6 @@
 
 import update from 'react-addons-update';
-import {SEND_MESSAGE} from "../chats";
-import {ADD_CHAT} from "../chats";
+import {SEND_MESSAGE, ADD_CHAT} from "./actions";
 
 const initialStore = {
     chats: {
@@ -15,32 +14,35 @@ const initialStore = {
     }
 };
 
-export const chatsReducer = (store = initialStore, action) => {
+export function chatsReducer(state = initialStore, action){
     switch (action.type) {
         case SEND_MESSAGE: {
-            return update(store, {
+            return update(state, {
                 chats: { $merge: { [action.chatId]: {
-                            title: store.chats[action.chatId].title,
+                            title: state.chats[action.chatId].title,
+                            messageList: [...state.chats[action.chatId].messageList,
+                                action.messageId],
                             input: '',
-                            messageList: [...store.chats[action.chatId].messageList,
-                                action.messageId]
                         } } },
                 messages: { $merge: { [action.messageId] : {
                             text: action.text,
                             author: action.author
                         } } }
-                    });
-        }
-        case ADD_CHAT: {
-            const chatId = Object.keys(store.chats).length + 1;
-            return update(store, {
-                chats: { $merge: {
-                        [chatId]: {
-                            title: action.title, messageList: []
-                        } } },
             });
         }
+        case ADD_CHAT:
+            const chatId = Object.keys(state.chats).length + 1;
+            return update(state, {
+                chats: { $merge: {
+                        [chatId]: {
+                            title: action.title,
+                            messageList: [],
+                            input: ''
+                        } } },
+            });
         default:
-            return store;
+            return state;
     }
-};
+}
+
+
