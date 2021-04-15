@@ -1,6 +1,6 @@
 
 import update from 'react-addons-update';
-import {SEND_MESSAGE, ADD_CHAT, CHANGE_ACTIVITY} from "./actions";
+import {SEND_MESSAGE, ADD_CHAT, CHANGE_ACTIVITY, DELETE_CHAT} from "./actions";
 
 const initialStore = {
     chats: {
@@ -13,6 +13,19 @@ const initialStore = {
         2: { text: "Здравствуйте!", author: 'Robot' },
     }
 };
+
+function deleteItem(chats, indexDelete) {
+    let resChats = {};
+    let currIndex = 1;
+    Object.keys(chats).map(index => {
+        if( index !== indexDelete){
+            resChats[currIndex] = chats[index];
+            currIndex++;
+        }
+    });
+
+    return resChats;
+}
 
 export function chatsReducer(state = initialStore, action){
     switch (action.type) {
@@ -42,6 +55,11 @@ export function chatsReducer(state = initialStore, action){
                             isActive: false
                         } } },
             });
+        case DELETE_CHAT:
+            return {
+                ...state,
+                chats: deleteItem(state.chats, action.index)
+            };
         case CHANGE_ACTIVITY:
             return update(state, {
                 chats: { $merge: {

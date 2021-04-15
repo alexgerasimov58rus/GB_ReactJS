@@ -1,13 +1,14 @@
 
 import {InputAdornment, List, ListItem, ListItemText, Input} from "@material-ui/core"
-import {Add} from "@material-ui/icons"
+import {Add, Delete} from "@material-ui/icons"
 import styles from './chat-list.module.css'
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
 import React, { Component } from "react"
-import {addChat} from "@app/store";
+import {addChat, deleteChat} from "@app/store";
 import {connect} from "react-redux";
 import { push } from 'connected-react-router';
+import classNames from 'classnames';
 
 class ChatList extends Component {
     state = {
@@ -18,6 +19,7 @@ class ChatList extends Component {
         chatId: PropTypes.number.isRequired,
         chats: PropTypes.object.isRequired,
         addChat: PropTypes.func.isRequired,
+        deleteChat: PropTypes.func.isRequired,
         push: PropTypes.func.isRequired,
     };
 
@@ -42,23 +44,32 @@ class ChatList extends Component {
         this.props.push(link);
     };
 
+    handleDeleteChat = (index) => {
+        const { chats } = this.props;
+
+        if( confirm('Удалить ' + chats[index].title + ' ?') === true){
+            this.props.deleteChat(index);
+        }
+    };
+
     render() {
         const { chats, chatId } = this.props;
-
-        console.log(chats);
 
         return (
             <div className={styles.chatList}>
                 <List component="nav" aria-label="secondary mailbox folders">
                     {Object.keys(chats).map(index => (
-                        <div key = {index} className={chats[index].isActive ? styles.activity: ''}>
-                            <ListItem button
+                        <div key = {index} className={classNames(styles.item, chats[index].isActive ? styles.activity: '')}>
+                            <ListItem
                                 key={ index }
                                 onClick={ () => this.handleNavigate(`/chat/${index}`) }
                                 selected={ "" + chatId === index }
                             >
                                 <ListItemText primary={chats[index].title} />
                             </ListItem>
+                            <Delete
+                                className={styles.icon}
+                                onClick={ () => this.handleDeleteChat(index) } />
                         </div>
                     ))}
                     <ListItem
@@ -96,7 +107,7 @@ const mapStateToProps = ( state ) => {
     };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({ addChat, push },
+const mapDispatchToProps = dispatch => bindActionCreators({ addChat, deleteChat, push },
     dispatch);
 
 export const VisibleChatList = connect(
