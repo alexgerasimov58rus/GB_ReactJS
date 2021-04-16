@@ -33,7 +33,7 @@ const myStore = createStore(
     ),
     compose(
         applyMiddleware(routerMiddleware(history), botSendMessage),
-            window.__REDUX_DEVTOOLS_EXTENSION__ ?
+        window.__REDUX_DEVTOOLS_EXTENSION__ ?
             window.__REDUX_DEVTOOLS_EXTENSION__() : () => {}
     )
 );
