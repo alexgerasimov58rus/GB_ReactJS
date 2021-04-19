@@ -13,6 +13,7 @@ import { persistReducer, persistStore } from "redux-persist"
 import { PersistGate } from 'redux-persist/integration/react';
 import storage from "redux-persist/lib/storage"
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+import thunk from "redux-thunk";
 
 const dark = {
 };
@@ -27,12 +28,12 @@ const config = {
 };
 
 const myStore = createStore(
-    persistReducer(
-        config,
-        Reducers
-    ),
+    // persistReducer(
+    //     config,
+        Reducers,
+    // ),
     compose(
-        applyMiddleware(routerMiddleware(history), botSendMessage),
+        applyMiddleware(thunk, routerMiddleware(history), botSendMessage),
         window.__REDUX_DEVTOOLS_EXTENSION__ ?
             window.__REDUX_DEVTOOLS_EXTENSION__() : () => {}
     )
@@ -43,11 +44,11 @@ const myPersistor = persistStore(myStore);
 ReactDom.render(
     <Provider store={myStore}>
         <ConnectedRouter history={history}>
-            <PersistGate persistor={myPersistor}>
+            {/*<PersistGate persistor={myPersistor}>*/}
                 <MuiThemeProvider theme = {theme}>
                     <Router />
                 </MuiThemeProvider>
-            </PersistGate>
+            {/*</PersistGate>*/}
         </ConnectedRouter>
     </Provider>,
     document.querySelector("#root")

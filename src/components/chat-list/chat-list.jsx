@@ -5,7 +5,7 @@ import styles from './chat-list.module.css'
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
 import React, { Component } from "react"
-import {addChat, deleteChat} from "@app/store";
+import {addChat, deleteChat, getChats} from "@app/store";
 import {connect} from "react-redux";
 import { push } from 'connected-react-router';
 import classNames from 'classnames';
@@ -19,6 +19,7 @@ class ChatList extends Component {
         chatId: PropTypes.number.isRequired,
         chats: PropTypes.object.isRequired,
         addChat: PropTypes.func.isRequired,
+        getChats: PropTypes.func.isRequired,
         deleteChat: PropTypes.func.isRequired,
         push: PropTypes.func.isRequired,
     };
@@ -52,10 +53,14 @@ class ChatList extends Component {
         }
     };
 
-    render() {
-        const { chats, chatId } = this.props;
+    componentDidMount(){
+        this.props.getChats();
+    }
 
-        return (
+    render() {
+        const { chats, chatId, chatsPending } = this.props;
+
+        return chatsPending ? (<div> Загрузка... </div>) : (
             <div className={styles.chatList}>
                 <List component="nav" aria-label="secondary mailbox folders">
                     {Object.keys(chats).map(index => (
@@ -104,10 +109,11 @@ class ChatList extends Component {
 const mapStateToProps = ( state ) => {
     return {
         chats: state.chatsReducer.chats,
+        chatsPending: state.chatsReducer.chatsPending
     };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({ addChat, deleteChat, push },
+const mapDispatchToProps = dispatch => bindActionCreators({ addChat, deleteChat, getChats, push },
     dispatch);
 
 export const VisibleChatList = connect(
