@@ -8,7 +8,6 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {getChats, sendMessage, getChatMessages} from "../../store"
 import {bindActionCreators} from "redux";
-import {push} from "connected-react-router";
 
 const StyledInput = withStyles(() => {
     return {
