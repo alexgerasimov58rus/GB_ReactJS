@@ -29,7 +29,7 @@ const getChatMessages= (request, response) => {
 
 const addChatMessage= (request, response) => {
     const {id, author, text} = request.body;
-    messages[id] = [...messages[id], {"author": author, "text": text}];
+    messages[id] = [...messages[id] || [], {"author": author, "text": text}];
     response.status(200).send("OK");
 };
 
