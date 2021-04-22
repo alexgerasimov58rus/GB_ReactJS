@@ -6,7 +6,7 @@ import { Provider } from "react-redux"
 import React from 'react'
 import ReactDom from 'react-dom'
 import {applyMiddleware, compose, createStore} from 'redux'
-import { Reducers, botSendMessage, history } from "./store";
+import { Reducers, botSendMessage, history, postMessageToServer, deleteChatFromServer, addChatToServer } from "./store";
 import { ConnectedRouter } from 'connected-react-router';
 import { routerMiddleware } from 'connected-react-router'
 import { persistReducer, persistStore } from "redux-persist"
@@ -33,7 +33,13 @@ const myStore = createStore(
         Reducers,
     // ),
     compose(
-        applyMiddleware(thunk, routerMiddleware(history), botSendMessage),
+        applyMiddleware(
+            thunk,
+            routerMiddleware(history),
+            botSendMessage,
+            postMessageToServer,
+            deleteChatFromServer,
+            addChatToServer),
         window.__REDUX_DEVTOOLS_EXTENSION__ ?
             window.__REDUX_DEVTOOLS_EXTENSION__() : () => {}
     )

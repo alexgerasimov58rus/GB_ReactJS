@@ -1,8 +1,8 @@
 
 import update from 'react-addons-update';
-import {SEND_MESSAGE, ADD_CHAT, CHANGE_ACTIVITY, DELETE_CHAT} from "./actions";
-import {GET_CHATS_PENDING, GET_CHATS_ERROR, GET_CHATS_SUCCESS} from "./actions";
-import {GET_MESSAGES_ERROR, GET_MESSAGES_PENDING, GET_MESSAGES_SUCCESS} from "./actions";
+import {SEND_MESSAGE, ADD_CHAT, CHANGE_ACTIVITY, DELETE_CHAT} from "./types";
+import {GET_CHATS_PENDING, GET_CHATS_ERROR, GET_CHATS_SUCCESS} from "./types";
+import {GET_MESSAGES_ERROR, GET_MESSAGES_PENDING, GET_MESSAGES_SUCCESS} from "./types";
 
 const initialStore = {
     chats: {},

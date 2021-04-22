@@ -1,17 +1,8 @@
 import {request} from "@app/api";
+import {SEND_MESSAGE, CHANGE_ACTIVITY, ADD_CHAT, DELETE_CHAT} from "@app/store/chats/types";
+import {GET_MESSAGES_SUCCESS, GET_MESSAGES_ERROR, GET_MESSAGES_PENDING} from "@app/store/chats/types";
+import {GET_CHATS_SUCCESS, GET_CHATS_PENDING, GET_CHATS_ERROR} from "@app/store/chats/types";
 
-export const ADD_CHAT = 'ADD_CHAT';
-export const DELETE_CHAT = 'DELETE_CHAT';
-export const SEND_MESSAGE = 'SEND_MESSAGE';
-export const CHANGE_ACTIVITY = 'CHANGE_ACTIVITY';
-
-export const GET_CHATS_PENDING = 'GET_CHATS_PENDING';
-export const GET_CHATS_SUCCESS = 'GET_CHATS_SUCCESS';
-export const GET_CHATS_ERROR = 'GET_CHATS_ERROR';
-
-export const GET_MESSAGES_PENDING = 'GET_MESSAGES_PENDING';
-export const GET_MESSAGES_SUCCESS = 'GET_MESSAGES_SUCCESS';
-export const GET_MESSAGES_ERROR = 'GET_MESSAGES_ERROR';
 
 export function sendMessage(text, author, chatId) {
     return {
